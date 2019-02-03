@@ -1,0 +1,17 @@
+{
+  "name": "magnet",
+  "version": "1.0.0",
+  "description": "magnet generator",
+  "bin": {
+    "mg": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xmmwc@qq.com",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "commander": "^2.17.1"
+  }
+}
