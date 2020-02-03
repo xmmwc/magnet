@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 const fse = require('fs-extra')
+const path = require('path')
 const program = require('commander')
 const axios = require('axios')
 const version = require('./package.json').version
 
-const trPath = './tr.txt'
+const trPath = path.join(__dirname, 'tr.txt')
 
 const collect = (val, memo) => {
   memo.push(val)
@@ -13,21 +14,24 @@ const collect = (val, memo) => {
 }
 
 const getList = () => {
-  return axios.get('https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt').then(data => {
+  return axios.get('https://github.com/ngosang/trackerslist/raw/master/trackers_best.txt').then(data => {
     saveTrackers(data.data)
     const list = data.data.trim().split('\n\n')
     return list
   }).catch(e => {
+    console.error(e.message)
+    console.warn('获取tr失败，使用本地tr')
     return getLocalTrackers()
   })
 }
 
 const saveTrackers = data => {
   fse.writeFileSync(trPath, data)
+  console.log('保存tr成功')
 }
 
 const getLocalTrackers = () => {
-  if (fse.pathExistsSync(trPath)){
+  if (fse.pathExistsSync(trPath)) {
     const buf = fse.readFileSync(trPath)
     const data = buf.toString()
     const list = data.trim().split('\n\n')
