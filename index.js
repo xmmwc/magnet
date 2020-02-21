@@ -14,7 +14,7 @@ const collect = (val, memo) => {
 }
 
 const getList = () => {
-  return fetch("https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_best.txt", {"credentials":"omit","headers":{"accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9","accept-language":"zh-CN,zh;q=0.9,en;q=0.8,ja;q=0.7,zh-TW;q=0.6","cache-control":"no-cache","pragma":"no-cache","sec-fetch-mode":"navigate","sec-fetch-site":"none","sec-fetch-user":"?1","upgrade-insecure-requests":"1"},"referrerPolicy":"no-referrer-when-downgrade","body":null,"method":"GET","mode":"cors"}).then(res => {
+  return fetch("https://ngosang.github.io/trackerslist/trackers_best.txt").then(res => {
     return res.text()
   }).then(data => {
     saveTrackers(data)
