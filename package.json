@@ -1,10 +1,10 @@
 {
   "name": "magnet",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "magnet generator",
-  "main": "dist/src/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "mg": "dist/src/bin.js"
+    "mg": "dist/bin.js"
   },
   "files": [
     "dist"
