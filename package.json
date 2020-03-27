@@ -1,13 +1,16 @@
 {
   "name": "magnet",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "magnet generator",
-  "main": "/dist/src/index.js",
+  "main": "dist/src/index.js",
   "bin": {
-    "mg": "/dist/src/bin.js"
+    "mg": "dist/src/bin.js"
   },
   "files": [
     "dist"
+  ],
+  "typing": [
+    "dist/index.d.ts"
   ],
   "author": "xmmwc@qq.com",
   "license": "ISC",
