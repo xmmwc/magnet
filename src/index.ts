@@ -5,6 +5,7 @@ import uri from 'urijs'
 
 
 const trPath = path.join(__dirname, 'tr.txt')
+const magnetTest = /magnet:\?xt=urn:[a-z0-9]+:[a-z0-9]{32}/i
 
 export interface TrackerStorageInterface {
   list: string[],
@@ -40,35 +41,49 @@ export interface MagnetOption {
   replaceTracker?: boolean
 }
 
+interface MagnetQuery {
+  xt: string,
+  dn: string,
+  tr: string[]
+}
+
 export const getMagnet = (magnet: string, downloadName?: string, trackers: string[] = [], option?: MagnetOption) => {
-  const defaultOption = {
-    getTracker: getLocalTrackers,
-    saveTracker: saveTrackers,
-    replaceTracker: false
-  }
-  const magnetOption = Object.assign({}, defaultOption, option)
-  return magnetOption.getTracker().then(({ list, time }) => {
-    const now = new Date().getTime()
-    const oneDay = 24 * 60 * 60 * 1000
-    if (!time || now > (+time) + oneDay) {
-      return getTrackers().then(async (list) => {
-        await magnetOption.saveTracker({ list, time: now })
+  if (magnetTest.test(magnet)) {
+    const defaultOption = {
+      getTracker: getLocalTrackers,
+      saveTracker: saveTrackers,
+      replaceTracker: false
+    }
+    const magnetOption = Object.assign({}, defaultOption, option)
+    return magnetOption.getTracker().then(({ list, time }) => {
+      const now = new Date().getTime()
+      const oneDay = 24 * 60 * 60 * 1000
+      if (!time || now > (+time) + oneDay) {
+        return getTrackers().then(async (list) => {
+          await magnetOption.saveTracker({ list, time: now })
+          return list
+        })
+      } else {
         return list
-      })
-    } else {
-      return list
-    }
-  }).then(list => {
-    const originMagnet = uri(magnet)
-    const tr = [...list, ...trackers]
-    if (downloadName) {
-      originMagnet.setQuery('dn', downloadName)
-    }
-    if (magnetOption.replaceTracker) {
-      originMagnet.setQuery({ tr })
-    } else {
-      originMagnet.addQuery({ tr })
-    }
-    return originMagnet.toString()
-  })
+      }
+    }).then(list => {
+      const originMagnet = uri(magnet)
+      const originalQuery: MagnetQuery = uri.parseQuery(magnet.split('?')[1]) as MagnetQuery
+      const tr = [...list, ...trackers]
+      if (downloadName) {
+        originMagnet.setQuery('dn', downloadName)
+      }
+      if (magnetOption.replaceTracker) {
+        originMagnet.setQuery({ tr })
+      } else {
+        originMagnet.addQuery({ tr })
+      }
+      originMagnet.removeQuery('xt')
+      const finalMagnet = `magnet:?xt=${originalQuery.xt}&${originMagnet.query()}`
+      return finalMagnet
+    })
+  } else {
+    return Promise.reject(new Error('magnet格式不正确'))
+  }
+
 }
