@@ -36,7 +36,7 @@ const getLocalTrackers: () => Promise<TrackerStorageInterface> = () => {
 
 export interface MagnetOption {
   getTracker?: () => Promise<TrackerStorageInterface>,
-  saveTracker?: (trackerData: TrackerStorageInterface) => void,
+  saveTracker?: (trackerData: TrackerStorageInterface) => Promise<void>,
   replaceTracker?: boolean
 }
 
@@ -51,8 +51,8 @@ export const getMagnet = (magnet: string, downloadName?: string, trackers: strin
     const now = new Date().getTime()
     const oneDay = 24 * 60 * 60 * 1000
     if (!time || now > (+time) + oneDay) {
-      return getTrackers().then((list) => {
-        magnetOption.saveTracker({ list, time: now })
+      return getTrackers().then(async (list) => {
+        await magnetOption.saveTracker({ list, time: now })
         return list
       })
     } else {
