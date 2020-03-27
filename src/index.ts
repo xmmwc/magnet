@@ -40,7 +40,7 @@ export interface MagnetOption {
   replaceTracker?: boolean
 }
 
-export const getMagnet = (magnet: string, downloadName: string, trackers: string[] = [], option?: MagnetOption) => {
+export const getMagnet = (magnet: string, downloadName?: string, trackers: string[] = [], option?: MagnetOption) => {
   const defaultOption = {
     getTracker: getLocalTrackers,
     saveTracker: saveTrackers,
