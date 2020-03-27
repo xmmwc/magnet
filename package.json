@@ -9,9 +9,7 @@
   "files": [
     "dist"
   ],
-  "typing": [
-    "dist/index.d.ts"
-  ],
+  "types": "dist/index.d.ts",
   "author": "xmmwc@qq.com",
   "license": "ISC",
   "dependencies": {
