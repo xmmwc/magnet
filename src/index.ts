@@ -47,6 +47,11 @@ interface MagnetQuery {
   tr: string[]
 }
 
+export const getMagnetByInfoHash = (infoHash: string, downloadName?: string, trackers: string[] = [], option?: MagnetOption) => {
+  const magnetLink = `magnet:?xt=urn:btih:${infoHash}`
+  return getMagnet(magnetLink, downloadName, trackers, option)
+}
+
 export const getMagnet = (magnet: string, downloadName?: string, trackers: string[] = [], option?: MagnetOption) => {
   if (magnetTest.test(magnet)) {
     const defaultOption = {
