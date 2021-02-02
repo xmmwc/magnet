@@ -9,7 +9,7 @@
     "forceConsistentCasingInFileNames": true,
     "module": "CommonJS",
     "moduleResolution": "node",
-    "resolvedJsonModule": true,
+    "resolveJsonModule": true,
     "declaration": true
   },
   "include": [
